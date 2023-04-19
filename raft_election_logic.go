@@ -97,8 +97,8 @@ func (this *RaftNode) startElection() {
 
 				// IMPLEMENT HANDLING THE VOTEREQUEST's REPLY;
 				// You probably need to have implemented becomeFollower before this.
-
 				//-------------------------------------------------------------------------------------------/
+				// Danish
 				if reply.Term > {
 					// TODO
 				} else if reply.Term ==  {
@@ -117,7 +117,7 @@ func (this *RaftNode) startElection() {
 // becomeFollower sets a node to be a follower and resets its state.
 func (this *RaftNode) becomeFollower(term int) {
 	this.write_log("became Follower with term=%d; log=%v", term, this.log)
-
+	// Hanea
 	// IMPLEMENT becomeFollower; do you need to start a goroutine here, maybe?
 	//-------------------------------------------------------------------------------------------/
 	// TODO
