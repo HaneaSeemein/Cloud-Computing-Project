@@ -5,9 +5,12 @@ import (
 	"time"
 )
 
-/* startElectionTimer implements an election timer. It should be launched whenever
+/*
+	startElectionTimer implements an election timer. It should be launched whenever
+
 we want to start a timer towards becoming a candidate in a new election.
-This function runs as a go routine */
+This function runs as a go routine
+*/
 func (this *RaftNode) startElectionTimer() {
 	timeoutDuration := time.Duration(3000+rand.Intn(3000)) * time.Millisecond
 	this.mu.Lock()
@@ -98,11 +101,19 @@ func (this *RaftNode) startElection() {
 				// IMPLEMENT HANDLING THE VOTEREQUEST's REPLY;
 				// You probably need to have implemented becomeFollower before this.
 				//-------------------------------------------------------------------------------------------/
-				// Danish
-				if reply.Term > {
-					// TODO
-				} else if reply.Term ==  {
-					// TODO
+
+				//voting implementation(Danish)
+				if reply.Term > this.currentTerm {
+					this.currentTerm = reply
+					return
+				} else if reply.Term == termWhenVoteRequested && reply.VoteGranted == true {
+					votesReceived++
+					if votesReceived > len(this.peersIds)/2 {
+						this.becomeLeader()
+					}
+				} else if reply.Term == termWhenVoteRequested && reply.VoteGranted == false {
+					this.becomeFollower(reply.Term)
+					return
 				}
 				//-------------------------------------------------------------------------------------------/
 
@@ -115,7 +126,7 @@ func (this *RaftNode) startElection() {
 }
 
 // becomeFollower sets a node to be a follower and resets its state.
-func (this *RaftNode) becomeFollower(term int){
+func (this *RaftNode) becomeFollower(term int) {
 	// Hanea
 	// IMPLEMENT becomeFollower; do you need to start a goroutine here, maybe?
 	//-------------------------------------------------------------------------------------------/
