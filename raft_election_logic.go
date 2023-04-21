@@ -104,16 +104,19 @@ func (this *RaftNode) startElection() {
 
 				//voting implementation(Danish)
 				if reply.Term > this.currentTerm {
-					this.currentTerm = reply
-					return
-				} else if reply.Term == termWhenVoteRequested && reply.VoteGranted == true {
-					votesReceived++
-					if votesReceived > len(this.peersIds)/2 {
-						this.becomeLeader()
-					}
-				} else if reply.Term == termWhenVoteRequested && reply.VoteGranted == false {
+					// this.currentTerm = reply
 					this.becomeFollower(reply.Term)
+					this.currentTerm = reply.Term
 					return
+				} else if reply.Term == termWhenVoteRequested {
+					if reply.VoteGranted == true {
+						votesReceived++
+						if votesReceived >= len(this.peersIds)/2 {
+							this.write_log("%d has been chosen as leader after election", this.id)
+							this.startLeader()
+							return
+						}
+					}
 				}
 				//-------------------------------------------------------------------------------------------/
 
