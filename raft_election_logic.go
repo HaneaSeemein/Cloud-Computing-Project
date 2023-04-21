@@ -120,12 +120,13 @@ func (this *RaftNode) becomeFollower(term int){
 	// IMPLEMENT becomeFollower; do you need to start a goroutine here, maybe?
 	//-------------------------------------------------------------------------------------------/
 	// TODO
-	this.mu.Lock()
+	// this.mu.Lock()
 	this.write_log("became Follower with term=%d; log=%v", term, this.log)
-	defer this.mu.Unlock()
+	// defer this.mu.Unlock()
 	this.state = "Follower"
 	this.currentTerm = term
 	this.votedFor = -1
+	// this.lastHeartbeatTime = time.Now()
 	this.lastElectionTimerStartedTime = time.Now()
 	go this.startElectionTimer()
 	//-------------------------------------------------------------------------------------------/
